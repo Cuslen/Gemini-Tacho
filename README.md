@@ -10,6 +10,10 @@ so you know when it is time to save important things before the cut.
 - **yellow** (from ~183k tokens) – save what matters
 - **red** (from ~223k tokens) – compaction can happen any moment
 
+![Window tacho](screenshots/window.png)
+
+![Details window of the tray version](screenshots/details.png)
+
 Two variants:
 
 | File | What it does | Needs |
