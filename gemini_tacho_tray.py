@@ -83,6 +83,8 @@ class Tacho:
         self.root.withdraw()
         self.jobs = queue.Queue()
         self.previous = {}
+        self.warned = set()  # chats that already got the red alert
+        self.alert = None
         self.detail = None
         self.icon = pystray.Icon(
             "gemini_tacho", ring(0, GREY), "Gemini-Tacho",
@@ -99,6 +101,39 @@ class Tacho:
                 f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')}  chat {chat_id(path)}  "
                         f"{fmt(before)} -> {fmt(tokens)}\n")
 
+    def red_alert(self, path, tokens, share):
+        """Alert once per chat when the tacho turns red - the colour alone is
+        easy to miss. After a compaction (back below red) it is armed again."""
+        if level(share) != "red":
+            self.warned.discard(path)
+            return
+        if path in self.warned:
+            return
+        self.warned.add(path)
+        text = (f"{fmt(tokens)} tokens ({share:.0%}) – automatic compaction is coming soon. "
+                f"Tell Gemini now to save what matters.")
+        try:
+            self.icon.notify(text, "Gemini-Tacho: red")
+        except Exception:  # the balloon is a bonus, the tacho keeps running
+            pass
+        # The balloon does not stay in the Windows notification history -
+        # this window stays on top until you click OK.
+        self.alert_window(f"{text}\n\nAlert at {time.strftime('%H:%M')}")
+
+    def alert_window(self, text):
+        if self.alert is None or not self.alert.winfo_exists():
+            self.alert = tk.Toplevel(self.root)
+            self.alert.title("Gemini-Tacho: red")
+            self.alert.attributes("-topmost", True)
+            self.alert.resizable(False, False)
+            self.alert_label = tk.Label(self.alert, font=("Segoe UI", 11), justify="left",
+                                        wraplength=380, fg="white", bg="#C0392B", padx=16, pady=14)
+            self.alert_label.pack(fill="both")
+            tk.Button(self.alert, text="OK", width=10, command=self.alert.destroy).pack(pady=10)
+        self.alert_label.config(text=text)
+        self.alert.deiconify()
+        self.alert.lift()
+
     def tick(self):
         try:
             path = gt.active_chat()
@@ -111,6 +146,7 @@ class Tacho:
                 self.remember_drop(path, tokens)
                 share = tokens / gt.WINDOW
                 self.icon.icon = ring(share, COLORS[level(share)])
+                self.red_alert(path, tokens, share)
                 age = int(time.time() - mtime)
                 self.icon.title = f"Gemini: {fmt(tokens)} tokens ({share:.0%}) · {age_text(age)}"
         except Exception as exc:  # the tacho must never crash

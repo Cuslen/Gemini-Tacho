@@ -19,7 +19,11 @@ Two variants:
 | File | What it does | Needs |
 |---|---|---|
 | `gemini_tacho.py` | small always-on-top window with the number | Python only (tkinter) |
-| `gemini_tacho_tray.py` | ring icon in the Windows taskbar tray, hover for the number, click for details | `pystray`, `Pillow` |
+| `gemini_tacho_tray.py` | ring icon in the Windows taskbar tray, hover for the number, click for details, alert when it turns red | `pystray`, `Pillow` |
+
+When the tray version turns red, it shows a Windows balloon **and** a red always-on-top window that stays
+until you click OK – so you don't miss it when you were away. Once per chat; after a compaction it is armed
+again.
 
 ## How it works
 
@@ -61,5 +65,10 @@ pythonw gemini_tacho_tray.py
 ## Caveats
 
 - The transcript format is **not documented** by Google. An Antigravity update can change it and break the tacho.
-- Tested on Windows 11 only.
+- Tested on Windows 11 with Antigravity up to v2.28.2 only.
 - Not affiliated with Google. "Gemini" and "Antigravity" are trademarks of Google.
+
+## Changelog
+
+- **1.0.1** – Tray version: alert (balloon + red window until OK) when the tacho turns red, once per chat.
+- **1.0.0** – First release.
