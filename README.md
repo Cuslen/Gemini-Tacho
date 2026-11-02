@@ -6,6 +6,9 @@ Antigravity compacts a chat automatically once the context gets full – without
 showing you how full it is. Gemini-Tacho shows the current token count of your active Antigravity chat,
 so you know when it is time to save important things before the cut.
 
+Made for the **Antigravity desktop app**, where extensions such as context monitors can't be installed.
+It only reads the transcript files on disk, so it should work with the IDE as well (tested with the desktop app).
+
 - **green** – plenty of room
 - **yellow** (from ~183k tokens) – save what matters
 - **red** (from ~223k tokens) – compaction can happen any moment
