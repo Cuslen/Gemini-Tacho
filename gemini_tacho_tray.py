@@ -6,6 +6,7 @@ Data and thresholds come from gemini_tacho.py (reads count fields only).
 
 Start: pythonw gemini_tacho_tray.py
 """
+import ctypes
 import json
 import os
 import queue
@@ -14,6 +15,11 @@ import tkinter as tk
 
 import pystray
 from PIL import Image, ImageDraw
+
+try:  # pystray's Windows internals, only used to restore a lost tray icon
+    from pystray._util import win32 as pw
+except Exception:
+    pw = None
 
 import gemini_tacho as gt
 
@@ -151,7 +157,23 @@ class Tacho:
                 self.icon.title = f"Gemini: {fmt(tokens)} tokens ({share:.0%}) · {age_text(age)}"
         except Exception as exc:  # the tacho must never crash
             self.icon.title = f"Gemini-Tacho: {type(exc).__name__}"
+        self.ensure_icon()
         self.root.after(gt.TICK_MS, self.tick)
+
+    def ensure_icon(self):
+        """Re-add the tray icon if Windows lost it. After monitor standby Windows
+        may rebuild the taskbar; the icon vanished while the process kept running.
+        NIM_MODIFY fails when the icon is missing - then NIM_ADD via pystray's _show()."""
+        if pw is None or not self.icon.visible:
+            return
+        try:
+            data = pw.NOTIFYICONDATAW(cbSize=ctypes.sizeof(pw.NOTIFYICONDATAW),
+                                      hWnd=self.icon._hwnd, hID=id(self.icon),
+                                      uFlags=pw.NIF_TIP, szTip=self.icon.title or "Gemini-Tacho")
+            if not pw.Shell_NotifyIcon(pw.NIM_MODIFY, data):
+                self.icon._show()
+        except Exception:  # restoring is a bonus, never crash
+            pass
 
     # --- details window --------------------------------------------------
     def details_text(self):
