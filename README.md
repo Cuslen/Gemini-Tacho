@@ -73,5 +73,6 @@ pythonw gemini_tacho_tray.py
 
 ## Changelog
 
+- **1.0.2** – Tray version: restores its icon when Windows loses it (e.g. after the monitors went to standby and the taskbar was rebuilt).
 - **1.0.1** – Tray version: alert (balloon + red window until OK) when the tacho turns red, once per chat.
 - **1.0.0** – First release.
