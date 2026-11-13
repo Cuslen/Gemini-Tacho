@@ -68,7 +68,7 @@ pythonw gemini_tacho_tray.py
 ## Caveats
 
 - The transcript format is **not documented** by Google. An Antigravity update can change it and break the tacho.
-- Tested on Windows 11 with Antigravity up to v2.29.0 only.
+- Tested on Windows 11 with Antigravity up to v2.32.0 only.
 - Not affiliated with Google. "Gemini" and "Antigravity" are trademarks of Google.
 
 ## Changelog
