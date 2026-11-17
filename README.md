@@ -49,6 +49,13 @@ In October 2026 the last value before an automatic compaction was measured betwe
 tokens (9 cases), so roughly around 256 Ki (262,144). Yellow and red are set below the earliest case.
 If your values differ, adjust `WINDOW`, `YELLOW_FROM` and `RED_FROM` at the top of `gemini_tacho.py`.
 
+**Note (November 2026, Antigravity 2.32.1):** Since this version we no longer see automatic compaction at
+~262k. With Gemini 4 Hydrogen (1M context window) a chat ran past 510k tokens without being compacted.
+Most likely the automatic compaction was switched off or moved much higher – possibly server-side by Google
+(the engine reads a `compaction_threshold` from its config), so it may differ for you. We can't prove which.
+Until this is clear, treat the colours as a reminder to compact by hand (`/compact`). We use `WINDOW = 300_000`
+ourselves; the default here stays at 262,144.
+
 ## Start
 
 ```
