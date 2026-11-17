@@ -58,7 +58,8 @@ ourselves; the default here stays at 262,144.
 
 **Update:** One automatic compaction with Gemini 4 Hydrogen was observed at **518,919** tokens – just below
 524,288 (512 Ki), i.e. exactly double the old ~262k. So it seems the threshold was doubled for Hydrogen rather
-than removed. One case only; if you see more, please open an issue. Note that the compaction step itself reads
+than removed. One case only; if you see more, please open an issue. If you want the colours to follow the new
+point, swap to the commented line `WINDOW = 524_288` at the top of `gemini_tacho.py` (since 1.0.3). Note that the compaction step itself reads
 the whole chat once without cache, so compacting late is more expensive than compacting early.
 
 ## Start
@@ -85,6 +86,7 @@ pythonw gemini_tacho_tray.py
 
 ## Changelog
 
+- **1.0.3** – Optional second threshold line in `gemini_tacho.py` (`WINDOW = 524_288`) for the higher auto-compaction point seen since Antigravity 2.32.1 (see Thresholds).
 - **1.0.2** – Tray version: restores its icon when Windows loses it (e.g. after the monitors went to standby and the taskbar was rebuilt).
 - **1.0.1** – Tray version: alert (balloon + red window until OK) when the tacho turns red, once per chat.
 - **1.0.0** – First release.

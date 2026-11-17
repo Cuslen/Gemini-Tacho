@@ -20,6 +20,7 @@ PATTERN = os.path.join(BRAIN, "*", ".system_generated", "logs", "transcript.json
 # (9 cases) the last value before compaction was between 243,696 and 265,166 - probably
 # the next request including the new input counts. Red therefore starts before the earliest case.
 WINDOW = 262_144
+# WINDOW = 524_288   # since Antigravity 2.32.1 (Nov 2026) auto-compaction was seen near 512 Ki - swap the lines
 YELLOW_FROM = 0.70   # from ~183k yellow: save what matters
 RED_FROM = 0.85      # from ~223k red: compaction can happen any moment
 TICK_MS = 5000
