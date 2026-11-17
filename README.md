@@ -56,6 +56,11 @@ Most likely the automatic compaction was switched off or moved much higher – p
 Until this is clear, treat the colours as a reminder to compact by hand (`/compact`). We use `WINDOW = 300_000`
 ourselves; the default here stays at 262,144.
 
+**Update:** One automatic compaction with Gemini 4 Hydrogen was observed at **518,919** tokens – just below
+524,288 (512 Ki), i.e. exactly double the old ~262k. So it seems the threshold was doubled for Hydrogen rather
+than removed. One case only; if you see more, please open an issue. Note that the compaction step itself reads
+the whole chat once without cache, so compacting late is more expensive than compacting early.
+
 ## Start
 
 ```
